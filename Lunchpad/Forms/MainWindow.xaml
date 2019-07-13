@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lunchpad"
         mc:Ignorable="d"
-        Title="Lunchpad" Height="640" Width="640" Closing="Window_Closing">
+        Title="Lunchpad" Tag="Lunchpad - Page: {0}" Height="640" Width="640" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -19,6 +19,5 @@
             </Grid.ColumnDefinitions>
             <Button Name="btnConfig" Height="32" Grid.Column="0" Click="btnConfig_Click">Config</Button>
         </Grid>
-        <Button Style="{StaticResource LaunchpadKey}" Content="Button" HorizontalAlignment="Left" Margin="303,399,0,0" VerticalAlignment="Top" Width="125" Height="98"/>
     </Grid>
 </Window>

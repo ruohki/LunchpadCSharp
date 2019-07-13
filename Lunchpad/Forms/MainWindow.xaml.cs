@@ -78,7 +78,7 @@ namespace Lunchpad
       configFile = String.Format("{0}\\config.xml", exeFile.DirectoryName);
       if (!File.Exists(configFile)) {
         LPConfig newConfig = new LPConfig();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 15; i++) {
           var Page = new LPPage(i);
           Page.Initialize();
           newConfig.Pages.Add(Page);
@@ -100,8 +100,10 @@ namespace Lunchpad
       Initialize();
       SelectedPage = Config.Pages.FirstOrDefault();
 
+      Launchpad.clearAllLEDs();
       BuildLight();
       BuildButtons();
+      SelectPage(0);
     }
     
     public void Initialize() {
@@ -113,24 +115,55 @@ namespace Lunchpad
 
     private void Launchpad_OnLaunchpadCCKeyPressed(object source, LaunchpadInterface.LaunchpadCCKeyEventArgs e)
     {
-      //Stop All
-      if (e.GetVal() == 7) {
-        if (e.GetPressed()) {
-          Launchpad.setSideLED(7, 72);
-          ReleasePushToTalk();
-          var tempStack = new List<WaveOut>();
-          foreach (var Pair in WaveStack) {
-            tempStack.Add(Pair.Value);
-          }
 
-          foreach(var Wave in tempStack) {
-            Wave.Stop();
-          }
+            //Stop All
+            if (e.GetVal() == 7)
+            {
+                if (e.GetPressed())
+                {
+                    Launchpad.setSideLED(7, 72);
+                    ReleasePushToTalk();
+                    var tempStack = new List<WaveOut>();
+                    foreach (var Pair in WaveStack)
+                    {
+                        tempStack.Add(Pair.Value);
+                    }
 
-        } else {
-          Launchpad.setSideLED(7, 0);
-        }
-      }
+                    foreach (var Wave in tempStack)
+                    {
+                        Wave.Stop();
+                    }
+
+                }
+                else
+                {
+                    Launchpad.setSideLED(7, 0);
+                }
+            }
+            else
+            {
+                var page = e.GetVal() + 8;
+                var pageExists = Config.GetPage(page) != null;
+                if (e.GetPressed())
+                {
+                    if (pageExists)
+                    {
+                        Launchpad.setSideLED(e.GetVal(), 52);
+                        SelectPage(page);
+                    }
+                    else
+                    {
+                        Launchpad.setSideLED(e.GetVal(), 72);
+                    }
+                }
+                else
+                {
+                    if (SelectedPage.Number != page)
+                    {
+                        Launchpad.setSideLED(e.GetVal(), 0);
+                    }
+                }
+            }
     }
 
     private void Launchpad_OnLaunchpadTopKeyPressed(object source, LaunchpadInterface.LaunchpadTOPKeyEventArgs e)
@@ -191,7 +224,6 @@ namespace Lunchpad
 
         BuildLight();
         BuildButtons();
-
       }
     }
 
@@ -417,6 +449,7 @@ namespace Lunchpad
         Properties.Settings.Default.Maximized = false;
       }
 
+      Launchpad.clearAllLEDs();
       Properties.Settings.Default.Save();
     }
 

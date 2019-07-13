@@ -173,7 +173,7 @@ namespace Lunchpad
         setSideLED(ry, 0);
       }
 
-      for (int tx = 1; tx < 9; tx++)
+      for (int tx = 0; tx < 9; tx++)
       {
         setTopLEDs(tx, 0);
       }
